@@ -3,6 +3,7 @@ from player import Player
 from sprites import *
 from random import randint
 from pytmx.util_pygame import load_pygame
+from groups import AllSprites
 
 class Game:
     def __init__(self):
@@ -14,13 +15,10 @@ class Game:
         self.running = True
 
         # groups
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = AllSprites()
         self.collision_sprites = pygame.sprite.Group()
 
         self.setup()
-
-        # sprites
-        self.player = Player(pos=(400,300), groups=self.all_sprites, collision_sprites=self.collision_sprites)
 
     def setup(self):
         world_map = load_pygame(join("data", "maps", "world.tmx"))
@@ -33,6 +31,11 @@ class Game:
 
         for obj in world_map.get_layer_by_name("Collisions"):
             CollisionSprite((obj.x, obj.y), pygame.Surface((obj.width, obj.height)), self.collision_sprites)
+
+        for obj in world_map.get_layer_by_name("Entities"):
+            if obj.name == 'Player':
+                self.player = Player(pos=(obj.x, obj.y), groups=self.all_sprites, collision_sprites=self.collision_sprites)
+
 
 
     def run(self):
@@ -50,7 +53,7 @@ class Game:
 
             # draw
             self.display_surface.fill("grey")
-            self.all_sprites.draw(self.display_surface)
+            self.all_sprites.draw(self.player.rect.center)
             pygame.display.update()
 
         pygame.quit()
