@@ -1,5 +1,4 @@
 from settings import *
-from sprites import Bullet
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, groups, collision_sprites):
@@ -16,8 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.collision_sprites = collision_sprites
 
     def load_images(self):
-        self.frames = {'left': [], 'right': [], 'up': [], 'down': []} # has to match the folders names
-
+        self.frames = {'left': [], 'right': [], 'up': [], 'down': []}  # has to match the folders names
         for state in self.frames.keys():
             for folder_path, sub_folders, file_names in walk(join('images', 'player', state)): # walk from os is used to walk through a folder
                 if file_names:
